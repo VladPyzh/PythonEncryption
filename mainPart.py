@@ -5,6 +5,7 @@ from reviewPackage.decode import decode
 from reviewPackage.train import train
 from reviewPackage.hack import hack
 from reviewPackage.vigenereHack import vigHack
+from reviewPackage.vernamCipher import vernamCipher
 
 parser = argparse.ArgumentParser(description='Work with ciphers and hacks')
 subparsers = parser.add_subparsers()
@@ -58,6 +59,13 @@ parserVigenereHack = subparsers.add_parser('vighack', help='Try to hack vigenere
 parserVigenereHack.set_defaults(func=vigHack)
 parserVigenereHack.add_argument('--input-file', type=argparse.FileType('r'))
 parserVigenereHack.add_argument('--output-file', type=argparse.FileType('w'))
+
+# Parsing Vernam cipher command
+parserVernamCipher = subparsers.add_parser('vernamcipher', help='Vernam Cipher. just take chr(ord(str1) ^ ord(str2))')
+parserVernamCipher.set_defaults(func=vernamCipher)
+parserVernamCipher.add_argument('--input-file', type=argparse.FileType('r'))
+parserVernamCipher.add_argument('--key', type=argparse.FileType('r'))
+parserVernamCipher.add_argument('--output-file', type=argparse.FileType('w'))
 
 argv = parser.parse_args()
 argv.func(argv)
