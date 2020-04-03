@@ -16,6 +16,7 @@ def CaesarEncoder(text, key):
 
 def VigenereEncoder(text, key):
     KEY = key.upper()
+
     def shift(arr):
         arr.append(arr.pop(0))
         return arr.copy()
@@ -33,11 +34,14 @@ def VigenereEncoder(text, key):
         vigenereTableB.append(alphabetBig.copy())
         alphabetBig = shift(alphabetBig)
     ans = ''
+    j = 0
     for i in range(len(text)):
         if text[i].islower():
-            ans += vigenereTableS[ord(key[i % len(key)]) - ord('a')][ord(text[i]) - ord('a')]
+            ans += vigenereTableS[ord(key[j % len(key)]) - ord('a')][ord(text[i]) - ord('a')]
+            j += 1
         elif text[i].isupper():
-            ans += vigenereTableB[ord(KEY[i % len(KEY)]) - ord('A')][ord(text[i]) - ord('A')]
+            ans += vigenereTableB[ord(KEY[j % len(KEY)]) - ord('A')][ord(text[i]) - ord('A')]
+            j += 1
         else:
             ans += text[i]
 

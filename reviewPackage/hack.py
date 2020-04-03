@@ -43,10 +43,7 @@ def hack(argv):
         elif i.isupper():
             i = i.lower()
             textModel[i] += 1
-    print(model)
-    print(textModel)
     dic = modelCompr(model, textModel)
-    print(dic)
     ans = ''
     for i in text:
         if i.islower():

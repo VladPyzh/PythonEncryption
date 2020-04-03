@@ -4,6 +4,7 @@ from reviewPackage.encode import encode
 from reviewPackage.decode import decode
 from reviewPackage.train import train
 from reviewPackage.hack import hack
+from reviewPackage.vigenereHack import vigHack
 
 parser = argparse.ArgumentParser(description='Work with ciphers and hacks')
 subparsers = parser.add_subparsers()
@@ -49,6 +50,14 @@ parserHack.set_defaults(func=hack)
 parserHack.add_argument('--input-file', type=argparse.FileType('r'))
 parserHack.add_argument('--output-file', type=argparse.FileType('w'))
 parserHack.add_argument('--model-file', required=True, type=argparse.FileType('r'))
+
+# Parsing vigenereHack command
+parserVigenereHack = subparsers.add_parser('vighack', help='Try to hack vigenere via index of coincidence'
+                                                           'Also we need hack model of caesar chipher'
+                                                           'output is not open text, but hackable by caesar\'s hack')
+parserVigenereHack.set_defaults(func=vigHack)
+parserVigenereHack.add_argument('--input-file', type=argparse.FileType('r'))
+parserVigenereHack.add_argument('--output-file', type=argparse.FileType('w'))
 
 argv = parser.parse_args()
 argv.func(argv)

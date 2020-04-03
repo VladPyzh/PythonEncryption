@@ -31,16 +31,19 @@ def VigenereDecoder(text, key):
         vigenereTableB.append(alphabetBig.copy())
         alphabetBig = shift(alphabetBig)
     ans = ''
+    k = 0
     for i in range(len(text)):
         if text[i].islower():
             for j in range(26):
-                if vigenereTableS[ord(key[i % len(key)]) - ord('a')][j] == text[i]:
+                if vigenereTableS[ord(key[k % len(key)]) - ord('a')][j] == text[i]:
                     ans += chr(ord('a') + j)
+                    k += 1
                     break
         elif text[i].isupper():
             for j in range(26):
-                if vigenereTableB[ord(KEY[i % len(KEY)]) - ord('A')][j] == text[i]:
+                if vigenereTableB[ord(KEY[k % len(KEY)]) - ord('A')][j] == text[i]:
                     ans += chr(ord('A') + j)
+                    k += 1
                     break
         else:
             ans += text[i]
