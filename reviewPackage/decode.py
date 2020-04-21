@@ -1,47 +1,31 @@
-import sys
+from reviewPackage.encode import caesar_encoder
+from reviewPackage.utility import vigenere_table_filler, parse_execute_command, output
 
-def CaesarDecoder(text, key):
+
+def caesar_decoder(text, key):
     key = int(key)
-    ans = ''
-    for i in text:
-        if i.isupper():
-            ans += chr((ord(i) - ord('A') - key) % (ord('Z') - ord('A') + 1) + ord('A'))
-        elif i.islower():
-            ans += chr((ord(i) - ord('a') - key) % (ord('z') - ord('a') + 1) + ord('a'))
-        else:
-            ans += i
-    return ans
+    return caesar_encoder(text, -key)
 
-def VigenereDecoder(text, key):
+
+def vigenere_decoder(text, key):
     KEY = key.upper()
-    def shift(arr):
-        arr.append(arr.pop(0))
-        return arr.copy()
 
-    alphabetSmall = []
-    alphabetBig = []
-    vigenereTableS = []
-    vigenereTableB = []
-    for i in range(26):
-        alphabetSmall.append(chr(ord('a') + i))
-        alphabetBig.append(chr(ord('A') + i))
-    for i in range(26):
-        vigenereTableS.append(alphabetSmall.copy())
-        alphabetSmall = shift(alphabetSmall)
-        vigenereTableB.append(alphabetBig.copy())
-        alphabetBig = shift(alphabetBig)
+    vigenere_table_small = []
+    vigenere_table_big = []
+
+    vigenere_table_filler(vigenere_table_small, vigenere_table_big)
     ans = ''
     k = 0
     for i in range(len(text)):
         if text[i].islower():
             for j in range(26):
-                if vigenereTableS[ord(key[k % len(key)]) - ord('a')][j] == text[i]:
+                if vigenere_table_small[ord(key[k % len(key)]) - ord('a')][j] == text[i]:
                     ans += chr(ord('a') + j)
                     k += 1
                     break
         elif text[i].isupper():
             for j in range(26):
-                if vigenereTableB[ord(KEY[k % len(KEY)]) - ord('A')][j] == text[i]:
+                if vigenere_table_big[ord(KEY[k % len(KEY)]) - ord('A')][j] == text[i]:
                     ans += chr(ord('A') + j)
                     k += 1
                     break
@@ -52,9 +36,6 @@ def VigenereDecoder(text, key):
 
 
 def decode(argv):
-    text = argv.input_file.read() if argv.input_file else sys.stdin.read()
-    decoded = CaesarDecoder(text, argv.key) if argv.cipher == 'caesar' else VigenereDecoder(text, argv.key)
-    if argv.output_file:
-        argv.output_file.write(decoded)
-    else:
-        sys.stdout.write(decoded)
+    text = parse_execute_command(argv)
+    decoded = caesar_decoder(text, argv.key) if argv.cipher == 'caesar' else vigenere_decoder(text, argv.key)
+    output(argv, decoded)

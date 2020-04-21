@@ -1,49 +1,48 @@
 import sys
 import json
+from reviewPackage.utility import shift, output, empty_dict_creator, alphabet_size
 
 
-def distance(modelNumbers, textModeNumbers):
+def distance(model_numbers, text_mode_numbers):
     ans = 0
-    for i in range(26):
-        ans += abs(modelNumbers[i] - textModeNumbers[i])
+    for i in range(alphabet_size):
+        ans += abs(model_numbers[i] - text_mode_numbers[i])
     return ans
 
 
-def modelCompr(model, textModel):
-    def shift(arr):
-        arr.append(arr.pop(0))
-        return arr.copy()
-    modelNumbers = (list(model.values()))
-    textModelNumbers = (list(textModel.values()))
+def model_compare(model, text_model):
+    model_numbers = (list(model.values()))
+    text_model_numbers = (list(text_model.values()))
     dist = 100000000000
     for i in range(26):
-        if dist > distance(modelNumbers, textModelNumbers):
+        if dist > distance(model_numbers, text_model_numbers):
             move = i
-            dist = distance(modelNumbers, textModelNumbers)
-        shift(textModelNumbers)
+            dist = distance(model_numbers, text_model_numbers)
+        shift(text_model_numbers)
     alphabet = []
     for i in range(26):
         alphabet.append(chr(ord('a') + i))
-    alphabetCopy = alphabet.copy()
+    alphabet_copy = alphabet.copy()
     for i in range(move):
         shift(alphabet)
-    return dict(zip(alphabet, alphabetCopy))
+    return dict(zip(alphabet, alphabet_copy))
 
 
-def hack(argv):
-    text = argv.input_file.read() if argv.input_file else sys.stdin.read()
+def hack(argv, gift_from_vigenere=""):
+    if gift_from_vigenere == "":
+        text = argv.input_file.read() if argv.input_file else sys.stdin.read()
+    else:
+        text = gift_from_vigenere
     model = argv.model_file.read()
     model = json.loads(model)
-    textModel = {}
-    for i in range(26):
-        textModel[chr(i + ord('a'))] = 0
+    text_model = empty_dict_creator()
     for i in text:
         if i.islower():
-            textModel[i] += 1
+            text_model[i] += 1
         elif i.isupper():
             i = i.lower()
-            textModel[i] += 1
-    dic = modelCompr(model, textModel)
+            text_model[i] += 1
+    dic = model_compare(model, text_model)
     ans = ''
     for i in text:
         if i.islower():
@@ -52,8 +51,7 @@ def hack(argv):
             ans += dic[i.lower()].upper()
         else:
             ans += i
-    if argv.output_file:
-        argv.output_file.write(ans)
+    if gift_from_vigenere == "":
+        output(argv, ans)
     else:
-        sys.stdout.write(ans)
-
+        return ans

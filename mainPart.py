@@ -4,8 +4,8 @@ from reviewPackage.encode import encode
 from reviewPackage.decode import decode
 from reviewPackage.train import train
 from reviewPackage.hack import hack
-from reviewPackage.vigenereHack import vigHack
-from reviewPackage.vernamCipher import vernamCipher
+from reviewPackage.vigenere_hack import vig_hack
+from reviewPackage.vernam_cipher import vernam_cipher
 
 parser = argparse.ArgumentParser(description='Work with ciphers and hacks')
 subparsers = parser.add_subparsers()
@@ -44,28 +44,26 @@ parserTrain.add_argument('--model-file', required=True, type=argparse.FileType('
 
 # Parsing hack command
 parserHack = subparsers.add_parser('hack', help='Hack. Standard:'
-                                                'hack [--input-file input.txt]'
+                                                'hack --cipher {vigenere | caesar}'
+                                                '[--input-file input.txt]'
                                                 '[--output-file output.txt] '
                                                 '--model-file {model}')
 parserHack.set_defaults(func=hack)
+parserHack.add_argument('--cipher', choices=['caesar', 'vigenere'], required=True)
 parserHack.add_argument('--input-file', type=argparse.FileType('r'))
 parserHack.add_argument('--output-file', type=argparse.FileType('w'))
 parserHack.add_argument('--model-file', required=True, type=argparse.FileType('r'))
 
-# Parsing vigenereHack command
-parserVigenereHack = subparsers.add_parser('vighack', help='Try to hack vigenere via index of coincidence'
-                                                           'Also we need hack model of caesar chipher'
-                                                           'output is not open text, but hackable by caesar\'s hack')
-parserVigenereHack.set_defaults(func=vigHack)
-parserVigenereHack.add_argument('--input-file', type=argparse.FileType('r'))
-parserVigenereHack.add_argument('--output-file', type=argparse.FileType('w'))
 
 # Parsing Vernam cipher command
-parserVernamCipher = subparsers.add_parser('vernamcipher', help='Vernam Cipher. just take chr(ord(str1) ^ ord(str2))')
-parserVernamCipher.set_defaults(func=vernamCipher)
+parserVernamCipher = subparsers.add_parser('vernamcipher', help='Vernam Cipher. Take number in Z/26*Z')
+parserVernamCipher.set_defaults(func=vernam_cipher)
+parserVernamCipher.add_argument('--mode', choices=['decode', 'encode'], required=True)
 parserVernamCipher.add_argument('--input-file', type=argparse.FileType('r'))
 parserVernamCipher.add_argument('--key', type=argparse.FileType('r'))
 parserVernamCipher.add_argument('--output-file', type=argparse.FileType('w'))
 
 argv = parser.parse_args()
+if argv.func == hack and argv.cipher == 'vigenere':
+    argv.func = vig_hack
 argv.func(argv)
