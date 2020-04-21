@@ -1,6 +1,6 @@
 import sys
 import json
-from reviewPackage.utility import shift, output, empty_dict_creator, alphabet_size
+from review_package.utility import shift, output, empty_dict_creator, alphabet_size
 
 
 def distance(model_numbers, text_mode_numbers):

@@ -1,7 +1,7 @@
 import sys
 
 
-from reviewPackage.utility import parse_execute_command, alphabet_filler, alphabet_size, output
+from review_package.utility import parse_execute_command, alphabet_filler, alphabet_size, output
 
 
 def vernam_code(text, key, mode):

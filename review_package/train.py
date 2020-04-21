@@ -1,6 +1,6 @@
 import sys
 import json
-from reviewPackage.utility import parse_execute_command, empty_dict_creator
+from review_package.utility import parse_execute_command, empty_dict_creator
 
 
 def train(argv):

@@ -1,4 +1,4 @@
-from reviewPackage.utility import alphabet_filler, vigenere_table_filler, parse_execute_command, output, alphabet_size
+from review_package.utility import alphabet_filler, vigenere_table_filler, parse_execute_command, output, alphabet_size
 
 
 def caesar_encoder(text, key):

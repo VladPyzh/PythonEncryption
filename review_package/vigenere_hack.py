@@ -1,7 +1,6 @@
-import sys
-from reviewPackage.utility import empty_dict_creator, alphabet_size, language_vigenere_hack_const, alphabet_filler, \
+from review_package.utility import empty_dict_creator, alphabet_size, language_vigenere_hack_const, alphabet_filler, \
     parse_execute_command, output
-from reviewPackage.hack import hack
+from review_package.hack import hack
 
 
 def str_dif(sample, aim):

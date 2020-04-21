@@ -1,11 +1,11 @@
 import argparse
 
-from reviewPackage.encode import encode
-from reviewPackage.decode import decode
-from reviewPackage.train import train
-from reviewPackage.hack import hack
-from reviewPackage.vigenere_hack import vig_hack
-from reviewPackage.vernam_cipher import vernam_cipher
+from review_package.encode import encode
+from review_package.decode import decode
+from review_package.train import train
+from review_package.hack import hack
+from review_package.vigenere_hack import vig_hack
+from review_package.vernam_cipher import vernam_cipher
 
 parser = argparse.ArgumentParser(description='Work with ciphers and hacks')
 subparsers = parser.add_subparsers()
@@ -56,7 +56,7 @@ parserHack.add_argument('--model-file', required=True, type=argparse.FileType('r
 
 
 # Parsing Vernam cipher command
-parserVernamCipher = subparsers.add_parser('vernamcipher', help='Vernam Cipher. Take number in Z/26*Z')
+parserVernamCipher = subparsers.add_parser('vernam-cipher', help='Vernam Cipher. Take number in Z/26*Z')
 parserVernamCipher.set_defaults(func=vernam_cipher)
 parserVernamCipher.add_argument('--mode', choices=['decode', 'encode'], required=True)
 parserVernamCipher.add_argument('--input-file', type=argparse.FileType('r'))

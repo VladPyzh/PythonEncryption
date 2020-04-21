@@ -1,5 +1,5 @@
-from reviewPackage.encode import caesar_encoder
-from reviewPackage.utility import vigenere_table_filler, parse_execute_command, output
+from review_package.encode import caesar_encoder
+from review_package.utility import vigenere_table_filler, parse_execute_command, output
 
 
 def caesar_decoder(text, key):
