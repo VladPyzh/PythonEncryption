@@ -1,4 +1,4 @@
-from review_package.utility import alphabet_filler, vigenere_table_filler, parse_execute_command, output, alphabet_size
+from review_package.utility import alphabet_filler, parse_execute_command, output, alphabet_size
 
 
 def caesar_encoder(text, key):
@@ -23,18 +23,23 @@ def caesar_encoder(text, key):
 def vigenere_encoder(text, key):
     KEY = key.upper()
 
-    vigenere_table_small = []
-    vigenere_table_big = []
+    alphabet_lower = []
+    alphabet_filler(alphabet_lower, 'lower')
+    alphabet_lower = "".join(alphabet_lower)
+    alphabet_upper = []
+    alphabet_filler(alphabet_upper, 'upper')
+    alphabet_upper = "".join(alphabet_upper)
 
-    vigenere_table_filler(vigenere_table_small, vigenere_table_big)
     ans = ''
     j = 0
     for i in range(len(text)):
         if text[i].islower():
-            ans += vigenere_table_small[ord(key[j % len(key)]) - ord('a')][ord(text[i]) - ord('a')]
+            ans += alphabet_lower[(alphabet_lower.find(key[j % len(key)])
+                                   + alphabet_lower.find(text[i])) % alphabet_size]
             j += 1
         elif text[i].isupper():
-            ans += vigenere_table_big[ord(KEY[j % len(KEY)]) - ord('A')][ord(text[i]) - ord('A')]
+            ans += alphabet_lower[(alphabet_upper.find(KEY[j % len(KEY)])
+                                   + alphabet_upper.find(text[i])) % alphabet_size]
             j += 1
         else:
             ans += text[i]

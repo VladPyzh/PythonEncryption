@@ -1,16 +1,14 @@
 import sys
+import string
 
 alphabet_size = 26
 language_vigenere_hack_const = 0.06
 
 
 def alphabet_filler(alphabet, register):
-    if register == 'upper':
-        for i in range(alphabet_size):
-            alphabet.append(chr(ord('A') + i))
-    else:
-        for i in range(alphabet_size):
-            alphabet.append(chr(ord('a') + i))
+    alpha_str = list(string.ascii_lowercase) if register == 'lower' else list(string.ascii_uppercase)
+    for letter in alpha_str:
+        alphabet.append(letter)
 
 
 def shift(arr):
@@ -47,5 +45,5 @@ def output(argv, text):
 def empty_dict_creator():
     alphabet = []
     alphabet_filler(alphabet, 'lower')
-    model = dict(zip(alphabet, [0] * alphabet_size))
+    model = {i: 0 for i in alphabet}
     return model

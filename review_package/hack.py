@@ -1,6 +1,6 @@
 import sys
 import json
-from review_package.utility import shift, output, empty_dict_creator, alphabet_size
+from review_package.utility import shift, output, empty_dict_creator, alphabet_size, alphabet_filler
 
 
 def distance(model_numbers, text_mode_numbers):
@@ -11,17 +11,16 @@ def distance(model_numbers, text_mode_numbers):
 
 
 def model_compare(model, text_model):
-    model_numbers = (list(model.values()))
-    text_model_numbers = (list(text_model.values()))
-    dist = 100000000000
-    for i in range(26):
+    model_numbers = list(model.values())
+    text_model_numbers = list(text_model.values())
+    dist = float('inf')
+    for i in range(alphabet_size):
         if dist > distance(model_numbers, text_model_numbers):
             move = i
             dist = distance(model_numbers, text_model_numbers)
         shift(text_model_numbers)
     alphabet = []
-    for i in range(26):
-        alphabet.append(chr(ord('a') + i))
+    alphabet_filler(alphabet, 'lower')
     alphabet_copy = alphabet.copy()
     for i in range(move):
         shift(alphabet)
