@@ -1,25 +1,24 @@
 import sys
 
 
-from review_package.utility import parse_execute_command, alphabet_filler, alphabet_size, output
+from review_package.utility import parse_input_command, alphabet_size, output, alphabet_lower_utility, \
+    alphabet_upper_utility
 
 
 def vernam_code(text, key, mode):
     ans = ''
-    alphabet_small = []
-    alphabet_big = []
-    alphabet_filler(alphabet_small, 'lower')
-    alphabet_filler(alphabet_big, 'upper')
-    alphabet_small = ''.join(alphabet_small)
-    alphabet_big = ''.join(alphabet_big)
+    alphabet_lower = ''.join(alphabet_lower_utility)
+    alphabet_upper = ''.join(alphabet_upper_utility)
     k = 0
     for i in range(len(text)):
         if text[i].islower():
             k += 1
-            ans += alphabet_small[(alphabet_small.find(text[i]) + mode * alphabet_small.find(key[k % len(key)])) % alphabet_size]
+            ans += alphabet_lower[(alphabet_lower.find(text[i]) +
+                                   mode * alphabet_lower.find(key[k % len(key)])) % alphabet_size]
         elif text[i].isupper():
             k += 1
-            ans += alphabet_big[(alphabet_big.find(text[i]) + mode * alphabet_big.find(key[k % len(key)])) % alphabet_size]
+            ans += alphabet_upper[(alphabet_upper.find(text[i]) +
+                                   mode * alphabet_upper.find(key[k % len(key)])) % alphabet_size]
         else:
             ans += text[i]
     return ans
@@ -27,7 +26,7 @@ def vernam_code(text, key, mode):
 
 def vernam_cipher(argv):
     mode = 1 if argv.mode == 'encode' else -1
-    text = parse_execute_command(argv)
+    text = parse_input_command(argv)
     key = argv.key.read() if argv.key else sys.stdin.read()
     ans = vernam_code(text, key, mode)
     output(argv, ans)

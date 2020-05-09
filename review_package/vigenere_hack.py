@@ -1,24 +1,25 @@
-from review_package.utility import empty_dict_creator, alphabet_size, language_vigenere_hack_const, alphabet_filler, \
-    parse_execute_command, output
+from review_package.utility import alphabet_size, language_vigenere_hack_const, \
+    alphabet_lower_utility, parse_input_command, output, model_creator
 from review_package.hack import hack
+import collections
 
 
 def str_dif(sample, aim):
     def shift(line):
         line = list(line)
+        alphabet_lower = ''.join(alphabet_lower_utility)
         for i in range(len(line)):
             if line[i] == 'a':
                 line[i] = 'z'
             else:
-                line[i] = chr(ord(line[i]) - 1)
+                line[i] = alphabet_lower[alphabet_lower.find(line[i]) - 1]
         line = ''.join(line)
         return line
 
     def mutual_index(sample, aim):
-        model_sample = empty_dict_creator()
-        model_aim = empty_dict_creator()
-        alphabet = []
-        alphabet_filler(alphabet, 'lower')
+        model_sample = collections.defaultdict(int)
+        model_aim = collections.defaultdict(int)
+        alphabet = alphabet_lower_utility
         n = len(sample)
         m = len(aim)
         ans = 0
@@ -54,15 +55,8 @@ def find_shift(text, key_length):
 def find_index(test_str):
     n = len(test_str)
     ans = 0
-    model = empty_dict_creator()
-    alphabet = []
-    alphabet_filler(alphabet, 'lower')
-    for i in test_str:
-        if i.islower():
-            model[i] += 1
-        elif i.isupper():
-            i = i.lower()
-            model[i] += 1
+    model = model_creator(test_str)
+    alphabet = alphabet_lower_utility
     for i in alphabet:
         frequency = model[i]
         ans += (frequency * (model[i] - 1)) / (n * (n - 1))
@@ -85,17 +79,19 @@ def find_len(text):
 
 
 def vig_hack(argv):
-    text = parse_execute_command(argv)
+    text = parse_input_command(argv)
     key_len = find_len(text)
     shifts = find_shift(text, key_len)
+    alphabet_lower = ''.join(alphabet_lower_utility)
     k = 0
     ans = ''
     for i in range(len(text)):
         if text[i].islower():
-            ans += chr((((ord(text[i]) - ord('a')) - shifts[k % len(shifts)]) % 26) + ord('a'))
+            ans += alphabet_lower[(alphabet_lower.find(text[i]) - shifts[k % len(shifts)]) % alphabet_size]
             k += 1
         elif text[i].isupper():
-            ans += chr((((ord(text[i]) - ord('A')) - shifts[k % len(shifts)]) % 26) + ord('A')).upper()
+            aim = text[i].lower()
+            ans += alphabet_lower[(alphabet_lower.find(aim) - shifts[k % len(shifts)]) % alphabet_size].upper()
             k += 1
         else:
             ans += text[i]

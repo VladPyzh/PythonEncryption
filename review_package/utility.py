@@ -1,14 +1,24 @@
 import sys
 import string
+import collections
 
 alphabet_size = 26
 language_vigenere_hack_const = 0.06
+alphabet_lower_utility = list(string.ascii_lowercase)
+alphabet_upper_utility = list(string.ascii_uppercase)
 
 
-def alphabet_filler(alphabet, register):
-    alpha_str = list(string.ascii_lowercase) if register == 'lower' else list(string.ascii_uppercase)
-    for letter in alpha_str:
-        alphabet.append(letter)
+def model_creator(text):
+    model = collections.defaultdict(int)
+    for i in alphabet_lower_utility:
+        model[i] = 0
+    for i in text:
+        if i.islower():
+            model[i] += 1
+        elif i.isupper():
+            i = i.lower()
+            model[i] += 1
+    return dict(model)
 
 
 def shift(arr):
@@ -16,21 +26,7 @@ def shift(arr):
     return arr.copy()
 
 
-def vigenere_table_filler(vigenere_table_small,
-                          vigenere_table_big):
-    alphabet_small = []
-    alphabet_big = []
-    alphabet_filler(alphabet_small, 'lower');
-    alphabet_filler(alphabet_big, 'upper');
-
-    for i in range(alphabet_size):
-        vigenere_table_small.append(alphabet_small.copy())
-        alphabet_small = shift(alphabet_small)
-        vigenere_table_big.append(alphabet_big.copy())
-        alphabet_big = shift(alphabet_big)
-
-
-def parse_execute_command(argv):
+def parse_input_command(argv):
     text = argv.input_file.read() if argv.input_file else sys.stdin.read()
     return text
 
@@ -40,10 +36,3 @@ def output(argv, text):
         argv.output_file.write(text)
     else:
         sys.stdout.write(text)
-
-
-def empty_dict_creator():
-    alphabet = []
-    alphabet_filler(alphabet, 'lower')
-    model = {i: 0 for i in alphabet}
-    return model

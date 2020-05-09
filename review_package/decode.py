@@ -1,5 +1,5 @@
-from review_package.encode import caesar_encoder
-from review_package.utility import vigenere_table_filler, parse_execute_command, output
+from review_package.encode import caesar_encoder, vigenere_encoder
+from review_package.utility import parse_input_command, output
 
 
 def caesar_decoder(text, key):
@@ -8,34 +8,10 @@ def caesar_decoder(text, key):
 
 
 def vigenere_decoder(text, key):
-    KEY = key.upper()
-
-    vigenere_table_small = []
-    vigenere_table_big = []
-
-    vigenere_table_filler(vigenere_table_small, vigenere_table_big)
-    ans = ''
-    k = 0
-    for i in range(len(text)):
-        if text[i].islower():
-            for j in range(26):
-                if vigenere_table_small[ord(key[k % len(key)]) - ord('a')][j] == text[i]:
-                    ans += chr(ord('a') + j)
-                    k += 1
-                    break
-        elif text[i].isupper():
-            for j in range(26):
-                if vigenere_table_big[ord(KEY[k % len(KEY)]) - ord('A')][j] == text[i]:
-                    ans += chr(ord('A') + j)
-                    k += 1
-                    break
-        else:
-            ans += text[i]
-
-    return ans
+    return vigenere_encoder(text, key, -1)
 
 
 def decode(argv):
-    text = parse_execute_command(argv)
+    text = parse_input_command(argv)
     decoded = caesar_decoder(text, argv.key) if argv.cipher == 'caesar' else vigenere_decoder(text, argv.key)
     output(argv, decoded)

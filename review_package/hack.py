@@ -1,6 +1,6 @@
 import sys
 import json
-from review_package.utility import shift, output, empty_dict_creator, alphabet_size, alphabet_filler
+from review_package.utility import shift, output, alphabet_size, model_creator, alphabet_lower_utility
 
 
 def distance(model_numbers, text_mode_numbers):
@@ -19,8 +19,7 @@ def model_compare(model, text_model):
             move = i
             dist = distance(model_numbers, text_model_numbers)
         shift(text_model_numbers)
-    alphabet = []
-    alphabet_filler(alphabet, 'lower')
+    alphabet = alphabet_lower_utility
     alphabet_copy = alphabet.copy()
     for i in range(move):
         shift(alphabet)
@@ -34,20 +33,14 @@ def hack(argv, gift_from_vigenere=""):
         text = gift_from_vigenere
     model = argv.model_file.read()
     model = json.loads(model)
-    text_model = empty_dict_creator()
-    for i in text:
-        if i.islower():
-            text_model[i] += 1
-        elif i.isupper():
-            i = i.lower()
-            text_model[i] += 1
-    dic = model_compare(model, text_model)
+    text_model = model_creator(text)
+    map_for_decode = model_compare(model, text_model)
     ans = ''
     for i in text:
         if i.islower():
-            ans += dic[i]
+            ans += map_for_decode[i]
         elif i.isupper():
-            ans += dic[i.lower()].upper()
+            ans += map_for_decode[i.lower()].upper()
         else:
             ans += i
     if gift_from_vigenere == "":
