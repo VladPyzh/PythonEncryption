@@ -7,13 +7,13 @@ import collections
 def str_dif(sample, aim):
     def shift(line):
         line = list(line)
-        alphabet_lower = ''.join(alphabet_lower_utility)
+        alphabet_lower = "".join(alphabet_lower_utility)
         for i in range(len(line)):
-            if line[i] == 'a':
-                line[i] = 'z'
+            if line[i] == alphabet_lower_utility[0]:
+                line[i] = alphabet_lower_utility[alphabet_size]
             else:
                 line[i] = alphabet_lower[alphabet_lower.find(line[i]) - 1]
-        line = ''.join(line)
+        line = "".join(line)
         return line
 
     def mutual_index(sample, aim):
@@ -41,11 +41,11 @@ def str_dif(sample, aim):
 
 def find_shift(text, key_length):
     shifts = [0 for i in range(key_length)]
-    moved_strings = ['' for i in range(key_length)]
+    moved_strings = [[] for i in range(key_length)]
     k = 0
-    for j in range(len(text)):
-        if text[j].isalpha():
-            moved_strings[k % key_length] += text[j].lower()
+    for j in text:
+        if j.isalpha():
+            moved_strings.append(j)
             k += 1
     for i in range(1, key_length):
         shifts[i] = str_dif(moved_strings[0], moved_strings[i])
@@ -66,14 +66,14 @@ def find_index(test_str):
 def find_len(text):
     j = 1
     while True:
-        test_str = ''
+        test_str = []
         k = 0
-        for i in range(len(text)):
-            if text[i].isalpha():
+        for i in text:
+            if i.isalpha():
                 if k % j == 0:
-                    test_str += text[i].lower()
+                    test_str.append(i.lower())
                 k += 1
-        if find_index(test_str) > language_vigenere_hack_const:
+        if find_index("".join(test_str)) > language_vigenere_hack_const:
             return j
         j += 1
 
@@ -84,16 +84,17 @@ def vig_hack(argv):
     shifts = find_shift(text, key_len)
     alphabet_lower = ''.join(alphabet_lower_utility)
     k = 0
-    ans = ''
+    ans = []
     for i in range(len(text)):
         if text[i].islower():
-            ans += alphabet_lower[(alphabet_lower.find(text[i]) - shifts[k % len(shifts)]) % alphabet_size]
+            ans.append(alphabet_lower[(alphabet_lower.find(text[i]) - shifts[k % len(shifts)]) % alphabet_size])
             k += 1
         elif text[i].isupper():
             aim = text[i].lower()
-            ans += alphabet_lower[(alphabet_lower.find(aim) - shifts[k % len(shifts)]) % alphabet_size].upper()
+            ans.append(alphabet_lower[(alphabet_lower.find(aim) - shifts[k % len(shifts)]) % alphabet_size].upper())
             k += 1
         else:
-            ans += text[i]
+            ans.append(text[i])
+    ans = "".join(ans)
     ans = hack(argv, ans)
     output(argv, ans)

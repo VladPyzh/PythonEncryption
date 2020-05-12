@@ -2,10 +2,11 @@ import sys
 import string
 import collections
 
-alphabet_size = 26
+
 language_vigenere_hack_const = 0.06
 alphabet_lower_utility = list(string.ascii_lowercase)
 alphabet_upper_utility = list(string.ascii_uppercase)
+alphabet_size = len(alphabet_lower_utility)
 
 
 def model_creator(text):

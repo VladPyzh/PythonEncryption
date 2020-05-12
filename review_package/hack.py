@@ -3,22 +3,21 @@ import json
 from review_package.utility import shift, output, alphabet_size, model_creator, alphabet_lower_utility
 
 
-def distance(model_numbers, text_mode_numbers):
+def distance(model_numbers, text_mode_numbers, move):
     ans = 0
     for i in range(alphabet_size):
-        ans += abs(model_numbers[i] - text_mode_numbers[i])
+        ans += abs(model_numbers[i] - text_mode_numbers[(i + move) % alphabet_size])
     return ans
 
 
 def model_compare(model, text_model):
     model_numbers = list(model.values())
     text_model_numbers = list(text_model.values())
-    dist = float('inf')
+    dist = float("inf")
     for i in range(alphabet_size):
-        if dist > distance(model_numbers, text_model_numbers):
+        if dist > distance(model_numbers, text_model_numbers, i):
             move = i
-            dist = distance(model_numbers, text_model_numbers)
-        shift(text_model_numbers)
+            dist = distance(model_numbers, text_model_numbers, i)
     alphabet = alphabet_lower_utility
     alphabet_copy = alphabet.copy()
     for i in range(move):
@@ -35,15 +34,15 @@ def hack(argv, gift_from_vigenere=""):
     model = json.loads(model)
     text_model = model_creator(text)
     map_for_decode = model_compare(model, text_model)
-    ans = ''
+    ans = []
     for i in text:
         if i.islower():
-            ans += map_for_decode[i]
+            ans.append(map_for_decode[i])
         elif i.isupper():
-            ans += map_for_decode[i.lower()].upper()
+            ans.append(map_for_decode[i.lower()].upper())
         else:
-            ans += i
+            ans.append(i)
     if gift_from_vigenere == "":
         output(argv, ans)
     else:
-        return ans
+        return "".join(ans)
