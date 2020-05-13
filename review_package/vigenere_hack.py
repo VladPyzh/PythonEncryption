@@ -1,5 +1,5 @@
 from review_package.utility import alphabet_size, language_vigenere_hack_const, \
-    alphabet_lower_utility, parse_input_command, output, model_creator
+    alphabet_lower_utility, parse_input_command, output
 from review_package.hack import hack
 import collections
 
