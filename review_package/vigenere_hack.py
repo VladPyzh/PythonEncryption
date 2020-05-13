@@ -10,7 +10,7 @@ def str_dif(sample, aim):
         alphabet_lower = "".join(alphabet_lower_utility)
         for i in range(len(line)):
             if line[i] == alphabet_lower_utility[0]:
-                line[i] = alphabet_lower_utility[alphabet_size]
+                line[i] = alphabet_lower_utility[alphabet_size - 1]
             else:
                 line[i] = alphabet_lower[alphabet_lower.find(line[i]) - 1]
         line = "".join(line)
@@ -45,35 +45,39 @@ def find_shift(text, key_length):
     k = 0
     for j in text:
         if j.isalpha():
-            moved_strings.append(j)
+            moved_strings[k % key_length].append(j)
             k += 1
     for i in range(1, key_length):
         shifts[i] = str_dif(moved_strings[0], moved_strings[i])
     return shifts
 
 
-def find_index(test_str):
-    n = len(test_str)
-    ans = 0
-    model = model_creator(test_str)
-    alphabet = alphabet_lower_utility
-    for i in alphabet:
-        frequency = model[i]
-        ans += (frequency * (model[i] - 1)) / (n * (n - 1))
-    return ans
+def my_aimed_iter(text, j):
+    cur = 0
+    for i in text:
+        if i.isalpha():
+            if cur % j == 0:
+                yield i.lower()
+            cur += 1
 
 
 def find_len(text):
     j = 1
     while True:
-        test_str = []
-        k = 0
-        for i in text:
-            if i.isalpha():
-                if k % j == 0:
-                    test_str.append(i.lower())
-                k += 1
-        if find_index("".join(test_str)) > language_vigenere_hack_const:
+        if j > 6:
+            exit()
+        model = collections.defaultdict(int)
+        check_str = ""
+        leng = 0
+        for i in my_aimed_iter(text, j):
+            leng += 1
+            check_str += i
+            model[i] += 1
+        alphabet = alphabet_lower_utility
+        index = 0
+        for i in alphabet:
+            index += (model[i] * (model[i] - 1)) / (leng * (leng - 1))
+        if index > language_vigenere_hack_const:
             return j
         j += 1
 
