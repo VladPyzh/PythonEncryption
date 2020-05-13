@@ -64,8 +64,6 @@ def my_aimed_iter(text, j):
 def find_len(text):
     j = 1
     while True:
-        if j > 6:
-            exit()
         model = collections.defaultdict(int)
         check_str = ""
         leng = 0
